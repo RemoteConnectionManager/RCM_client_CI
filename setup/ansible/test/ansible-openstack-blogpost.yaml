@@ -1,0 +1,92 @@
+---
+# Setup according to Blogpost "Full Stack automation with Ansible and OpenStack". Execute with "ansible-playbook ansible-openstack-blogpost.yml  -c local -vv"
+# #
+# #
+# #
+- name: Execute the Blogpost demo tasks
+  hosts: localhost
+  tasks:
+  - name: Download cirros image
+    get_url:
+      url: http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img
+      dest: /tmp/cirros-0.3.4-x86_64-disk.img
+  - name: Upload cirros image to openstack
+    os_image:
+      name: cirros
+      container_format: bare
+      disk_format: qcow2
+      state: present
+      filename: /tmp/cirros-0.3.4-x86_64-disk.img
+
+  - name: Create new keypair from current user's default SSH key
+    os_keypair:
+      state: present
+      name: ansible_key
+      public_key_file: "{{ '~' | expanduser }}/.ssh/id_rsa.pub"
+
+  - name: Create the test network
+    os_network:
+      state: present
+      name: testnet
+      external: False
+      shared: False
+      #provider_network_type: vlan
+      #provider_physical_network: datacentre
+    register: testnet_network
+
+  - name: Create the test subnet
+    os_subnet:
+      state: present
+      network_name: "{{ testnet_network.id }}"
+      name: testnet_sub
+      ip_version: 4
+      cidr: 192.168.0.0/24
+      gateway_ip: 192.168.0.1
+      enable_dhcp: yes
+      dns_nameservers:
+        - 8.8.8.8
+    register: testnet_sub
+
+  - name: Create the test router
+    ignore_errors: yes #for some reasons, re-running this task gives errors
+    os_router:
+      state: present
+      name: testnet_router
+      network: nova
+      external_fixed_ips:
+        - subnet: nova
+      interfaces:
+        - testnet_sub
+
+  - name: Create a new security group
+    os_security_group:
+      state: present
+      name: secgr
+  - name: Create a new security group allowing any ICMP
+    os_security_group_rule:
+      security_group: secgr
+      protocol: icmp
+      remote_ip_prefix: 0.0.0.0/0
+  - name: Create a new security group allowing any SSH connection
+    os_security_group_rule:
+      security_group: secgr
+      protocol: tcp
+      port_range_min: 22
+      port_range_max: 22
+      remote_ip_prefix: 0.0.0.0/0
+     
+  - name: Create server instance
+    os_server:
+      state: present
+      name: testServer
+      image: cirros
+      flavor: m1.small
+      security_groups: secgr
+      key_name: ansible_key
+      nics:
+        - net-id: "{{ testnet_network.id }}"
+    register: testServer
+
+  - name: Show Server's IP
+    debug: var=testServer.openstack.public_v4
+
