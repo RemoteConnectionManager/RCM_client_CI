@@ -11,6 +11,7 @@ then
   source ${ansible_venv}/bin/activate
   pip install ansible
   pip install pywinrm
+  pip install shade
 fi
 source ${ansible_venv}/bin/activate
 ansible_version=$(ansible --version | head -1 | cut -d' ' -f 2)
