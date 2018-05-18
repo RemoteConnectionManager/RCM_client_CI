@@ -14,19 +14,18 @@ while [ -h "$SOURCE" ]; do
 # we need to resolve it relative to the path where the symlink file was located
 done
 CURR_PATH="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-export BUILD_ROOT_PATH="$( dirname "$CURR_PATH" )" 
-export BUILD_RCM_SOURCE_PATH="$( dirname "$BUILD_ROOT_PATH" )/RCM" 
-export BUILD_RCM_EXTERNAL_PATH="$( dirname "$BUILD_ROOT_PATH" )/external" 
-export BUILD_RCM_ARTIFACTS_PATH="$( dirname "$BUILD_ROOT_PATH" )/artifacts" 
+export BUILD_ROOT_PATH="$( dirname $( dirname $( dirname "$CURR_PATH" ) ) )" 
+export BUILD_RCM_SOURCE_PATH="$BUILD_ROOT_PATH/RCM" 
+export BUILD_RCM_EXTERNAL_PATH="$BUILD_ROOT_PATH/external" 
+export BUILD_RCM_ARTIFACTS_PATH="$BUILD_ROOT_PATH/artifacts" 
 
 ########################################################
 echo "BUILD_ROOT_PATH-->$BUILD_ROOT_PATH<--"
 echo "BUILD_RCM_SOURCE_PATH-->$BUILD_RCM_SOURCE_PATH<--"
-echo "BUILD_RCM_EXTERNAL_PATH-->$BUILD_EXTERNAL_PATH<--"
+echo "BUILD_RCM_EXTERNAL_PATH-->$BUILD_RCM_EXTERNAL_PATH<--"
 echo "BUILD_RCM_ARTIFACTS_PATH-->$BUILD_RCM_ARTIFACTS_PATH<--"
-
 ###############   source specific VM setup ###########
-source $BUILD_ROOT_PATH/$1/setup.sh
+source $CURR_PATH/$1/setup.sh
 
 ##############   inspect VM environment ##############
 version=$(ssh $BUILD_USER@${BUILD_HOST} "cmd /C python --version")
