@@ -1,0 +1,12 @@
+---
+- hosts: all
+  tasks:
+    - name: Find out playbooks path
+      shell: pwd
+      register: playbook_path_output
+    - debug: var=playbook_path_output.stdout
+    - name: Find out playbook's path
+      shell: pwd
+      register: playbook_path_output
+    - debug: 
+      debug: var=playbook_path_output.stdout

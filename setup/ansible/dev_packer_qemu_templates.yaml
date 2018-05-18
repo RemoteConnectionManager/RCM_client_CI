@@ -1,0 +1,75 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  vars:
+    build_path: /var/tmp/
+    packages:
+#      - curl
+      - git
+#      - libvirt-client
+#      - libvirt-daemon-kvm
+#      - libvirt-devel
+#      - qemu-img
+#      - qemu-kvm
+      - unzip
+      - wget
+    packer_url: https://releases.hashicorp.com/packer/1.2.3/packer_1.2.3_linux_amd64.zip
+    packer_templates_git_repo: https://github.com/ruzickap/packer-templates.git
+    vagrant_plugins:
+      - vagrant-libvirt
+      - vagrant-winrm
+
+  tasks:
+
+    - name: Gather facts
+      setup:
+
+    - block:
+
+      - name: Install packages
+        apt:
+          name: "{{ item }}"
+        with_items: "{{ packages }}"
+
+      - name: Download and unzip packer
+        unarchive:
+          src: "{{ packer_url }}"
+          dest: /usr/local/bin/
+          remote_src: yes
+          creates: /usr/local/bin/packerio
+          validate_certs: false
+
+      - name: Move packer to packerio
+        command: mv /usr/local/bin/packer /usr/local/bin/packerio
+        args:
+          creates: /usr/sbin/packerio
+      become: true
+
+    - name: List installed Vagrant Plugins
+      command: vagrant plugin list
+      register: vagrant_plugin_list
+      changed_when: false
+
+    - name: Install Vagrant Plugins
+      command: vagrant plugin install {{ item }}
+      with_items: "{{ vagrant_plugins }}"
+      when: vagrant_plugin_list.stdout is not search(item)
+
+    - name: Clone the git repository
+      git:
+        repo: "{{ packer_templates_git_repo }}"
+        dest: "{{ build_path }}/packer-templates"
+        force: yes
+
+    - name: Execute script to build boxes (this step usually takes long time) [for more details check *.log in /var/tmp/packer]
+      shell: "{{ run_script }}"
+      register: run_script_out
+      args:
+        chdir: "{{ build_path }}/packer-templates"
+
+    - name: Run vagrant_init_destroy_boxes.sh script to test all previously created box images (this step usually takes long time) [for more details check /tmp/vagrant_init_destroy_boxes.log]
+      shell: ./vagrant_init_destroy_boxes.sh
+      register: out
+      args:
+        chdir: "{{ build_path }}/packer-templates"
