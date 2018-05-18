@@ -1,0 +1,26 @@
+#/bin/bash
+
+# add lvm for formatting external volume as extendable, see
+# https://wiki.u-gov.it/confluence/display/SCAIUS/How+to+mount+a+volume+attached+to+a+virtual+machine
+
+sudo apt-get install lvm2
+sudo fdisk -l
+sudo fdisk /dev/vdb --help
+sudo fdisk /dev/vdb
+sudo pvcreate /dev/vdb1
+sudo pvdisplay
+sudo vgcreate vgpool /dev/vdb1
+sudo vgdisplay
+sudo lvcreate -L 204796M -n lv_1 vgpool
+sudo lvdisplay
+
+#add mount point to /etc/fstab
+ line="$(sudo lvdisplay -c | cut -d':' -f 1) /mnt/vmstorage ext4 auto,nosuid,exec 0 0"
+## todo: append $line to /etc/fstab
+sudo echo $line >> /etc/fstab
+sudo mount -t ext4 /dev/vgpool/lv_1 /mnt/vm_storage
+sudo mkdir /mnt/vm_storage
+sudo mkdir /mnt/vm_storage/ubuntu
+sudo chown ubuntu:ubuntu ubuntu/
+
+mkdir /mnt/vmstorage/ubuntu/vbox_vms
