@@ -16,12 +16,14 @@ done
 CURR_PATH="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 export BUILD_ROOT_PATH="$( dirname $( dirname $( dirname "$CURR_PATH" ) ) )" 
 export BUILD_RCM_SOURCE_PATH="$BUILD_ROOT_PATH/RCM" 
+export BUILD_RCM_RELEASE=$(cd $BUILD_RCM_SOURCE_PATH; git describe)
 export BUILD_RCM_EXTERNAL_PATH="$BUILD_ROOT_PATH/external" 
 export BUILD_RCM_ARTIFACTS_PATH="$BUILD_ROOT_PATH/artifacts" 
 
 ########################################################
 echo "BUILD_ROOT_PATH-->$BUILD_ROOT_PATH<--"
 echo "BUILD_RCM_SOURCE_PATH-->$BUILD_RCM_SOURCE_PATH<--"
+echo "BUILD_RCM_RELEASE-->$BUILD_RCM_RELEASE<--"
 echo "BUILD_RCM_EXTERNAL_PATH-->$BUILD_RCM_EXTERNAL_PATH<--"
 echo "BUILD_RCM_ARTIFACTS_PATH-->$BUILD_RCM_ARTIFACTS_PATH<--"
 ###############   source specific VM setup ###########
@@ -66,16 +68,10 @@ ssh $BUILD_USER@${BUILD_HOST} "cmd /C IF EXIST deploy\\\turbovnc \(rmdir deploy\
 scp -r $BUILD_RCM_EXTERNAL_PATH/$BUILD_EXT_PATH $BUILD_USER@${BUILD_HOST}:deploy/RCM/rcm/client/external/turbovnc 
 
 ################## build release with pyinstaller #######
-echo "building onedir "
-build=$(ssh $BUILD_USER@${BUILD_HOST} "cmd /C py3env\\\\Scripts\\\\activate \& cd deploy \& mkdir onedir \& cd onedir \& pyinstaller ..\\\\RCM\\\\rcm\\\\client\\\\rcm_client_qt_onedir.spec")
+echo "building  both onedir nd onefile at same time"
+build=$(ssh $BUILD_USER@${BUILD_HOST} "cmd /C py3env\\\\Scripts\\\\activate \& cd deploy \& pyinstaller RCM\\\\rcm\\\\client\\\\rcm_client_qt.spec")
 echo "build result -->$build<--"
 
 ################## copy artifacts from vm #######
-scp -r $BUILD_USER@${BUILD_HOST}:deploy/onedir/dist/rcm_client_qt $BUILD_RCM_ARTIFACTS_PATH/$BUILD_PLATFORM/rcm_client_qt_dir
+scp -r $BUILD_USER@${BUILD_HOST}:deploy/dist $BUILD_RCM_ARTIFACTS_PATH/$BUILD_PLATFORM/$BUILD_RCM_RELEASE
 
-echo "building onefile "
-build=$(ssh $BUILD_USER@${BUILD_HOST} "cmd /C py3env\\\\Scripts\\\\activate \& cd deploy \& mkdir onefile \& cd onefile \& pyinstaller ..\\\\RCM\\\\rcm\\\\client\\\\rcm_client_qt_onefile.spec")
-echo "build result -->$build<--"
-
-################## copy artifacts from vm #######
-scp  $BUILD_USER@${BUILD_HOST}:deploy/onefile/dist/rcm_client_qt $BUILD_RCM_ARTIFACTS_PATH/$BUILD_PLATFORM
