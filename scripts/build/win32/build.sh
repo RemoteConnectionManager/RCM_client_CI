@@ -69,7 +69,7 @@ scp -r $BUILD_RCM_EXTERNAL_PATH/$BUILD_EXT_PATH $BUILD_USER@${BUILD_HOST}:deploy
 
 ################## build release with pyinstaller #######
 echo "building  both onedir nd onefile at same time"
-build=$(ssh $BUILD_USER@${BUILD_HOST} "cmd /C py3env\\\\Scripts\\\\activate \& cd deploy \& pyinstaller RCM\\\\rcm\\\\client\\\\rcm_client_qt.spec")
+build=$(ssh $BUILD_USER@${BUILD_HOST} "cmd /C py3env\\\\Scripts\\\\activate \& cd deploy \& pyinstaller RCM\\\\rcm\\\\client\\\\rcm_client_qt.spec ${BUILD_RCM_RELEASE}")
 echo "build result -->$build<--"
 
 ################## copy artifacts from vm #######
