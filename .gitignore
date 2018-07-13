@@ -3,4 +3,5 @@
 .DS_Store
 .idea
 .coverage
+py3env
 

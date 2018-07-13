@@ -35,9 +35,9 @@ In order to setup a developmemt environment on linux, you need python3 and virtu
 look at client instructions:
 * [RCM client README](https://github.com/RemoteConnectionManager/RCM/tree/refactoring/rcm/client)
 
+or you can use a setup script that is setting up needed environment and alias
 ```sh
-virtualenv -p python3 py3env
-source py3env/bin/activate
-pip3 install -r RCM_client_CI/RCM/rcm/client/requirements.txt
+source scripts/dev_setup.sh
+RCM
 ```
 
