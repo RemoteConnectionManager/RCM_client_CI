@@ -15,7 +15,7 @@ done
 CURR_PATH="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 export BUILD_ROOT_PATH="$( dirname $( dirname $( dirname "$CURR_PATH" ) ) )" 
 export BUILD_RCM_SOURCE_PATH="$BUILD_ROOT_PATH/RCM" 
-export BUILD_RCM_RELEASE=$(cd $BUILD_RCM_SOURCE_PATH; git describe)
+export BUILD_RCM_RELEASE=$(cd $BUILD_RCM_SOURCE_PATH; git describe --all --long)
 export BUILD_RCM_EXTERNAL_PATH="$BUILD_ROOT_PATH/external" 
 export BUILD_RCM_ARTIFACTS_PATH="$BUILD_ROOT_PATH/artifacts" 
 
