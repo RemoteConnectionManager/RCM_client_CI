@@ -33,7 +33,7 @@ ssh $BUILD_USER@${BUILD_HOST} ${BUILD_SUDO_SETUP}
 
 ##############   inspect VM environment ##############
 version=$(ssh $BUILD_USER@${BUILD_HOST} "python --version"  2>&1)
-echo "python version $version"
+echo "system python version $version"
 
 #pip not needed#version=$(ssh $BUILD_USER@${BUILD_HOST} "pip --version")
 #pip not needed#echo "pip version $version"
@@ -42,10 +42,14 @@ echo "python version $version"
 #uncomment#echo "unconditionally install virualenv"
 #uncomment#ssh $BUILD_USER@${BUILD_HOST} "pip3 install virtualenv"
 
-version=$(ssh $BUILD_USER@${BUILD_HOST} "virtualenv --version")
+version=$(ssh $BUILD_USER@${BUILD_HOST} "${BUILD_VIRTUALENV_COMMAND} --version")
 echo "virtualenv version $version"
 
-ssh $BUILD_USER@${BUILD_HOST} "if [ ! -f py3env/bin/activate ]; then virtualenv -p python3 py3env; fi"
+ssh $BUILD_USER@${BUILD_HOST} "if [ ! -f py3env/bin/activate ]; then ${BUILD_VIRTUALENV_COMMAND} py3env; fi"
+
+##############   inspect virtualenv environment ##############
+version=$(ssh $BUILD_USER@${BUILD_HOST} "source py3env/bin/activate && python --version"  2>&1)
+echo "virtualenv python version $version"
 
 echo "############ test paramiko import in virtualenv #####"
 ssh $BUILD_USER@${BUILD_HOST} "source py3env/bin/activate && python -c \"exec(\\\"try: import paramiko\\\nexcept:\\\\n print( 'missing paramiko')\\\")\""
