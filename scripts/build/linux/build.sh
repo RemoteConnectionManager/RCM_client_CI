@@ -29,7 +29,7 @@ echo "BUILD_RCM_ARTIFACTS_PATH-->$BUILD_RCM_ARTIFACTS_PATH<--"
 source $CURR_PATH/$1/setup.sh
 
 ############# setup #################################
-ssh $BUILD_USER@${BUILD_HOST} "sudo apt-get update && sudo apt-get install -y python-pip python-dev build-essential virtualenv"
+ssh $BUILD_USER@${BUILD_HOST} ${BUILD_SUDO_SETUP}
 
 ##############   inspect VM environment ##############
 version=$(ssh $BUILD_USER@${BUILD_HOST} "python --version")
