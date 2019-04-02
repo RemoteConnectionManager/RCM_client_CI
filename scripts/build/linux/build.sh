@@ -32,11 +32,11 @@ source $CURR_PATH/$1/setup.sh
 ssh $BUILD_USER@${BUILD_HOST} ${BUILD_SUDO_SETUP}
 
 ##############   inspect VM environment ##############
-version=$(ssh $BUILD_USER@${BUILD_HOST} "python --version")
+version=$(ssh $BUILD_USER@${BUILD_HOST} "python --version"  2>&1)
 echo "python version $version"
 
-version=$(ssh $BUILD_USER@${BUILD_HOST} "pip --version")
-echo "pip version $version"
+#pip not needed#version=$(ssh $BUILD_USER@${BUILD_HOST} "pip --version")
+#pip not needed#echo "pip version $version"
 
 ################### setup virtualenv ###############
 #uncomment#echo "unconditionally install virualenv"
