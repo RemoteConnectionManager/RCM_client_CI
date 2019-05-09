@@ -32,7 +32,7 @@ echo "BUILD_RCM_EXTERNAL_PATH-->$BUILD_RCM_EXTERNAL_PATH<--"
 echo "BUILD_RCM_ARTIFACTS_PATH-->$BUILD_RCM_ARTIFACTS_PATH<--"
 
 ############# system inspection #################################
-inspect=$(${BUILD_SSH_COMMAND} "hostname; -python -c 'import sys; print(sys.platform)'")
+inspect=$(${BUILD_SSH_COMMAND} "hostname; python -c 'import sys; print(sys.platform)'")
 echo "inspect: $inspect"
 
 ############# environment #################################
