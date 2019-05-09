@@ -67,7 +67,10 @@ echo "install RCM requirements"
 ${BUILD_SSH_COMMAND} "source py3env/bin/activate && which pip3 && pip3 install -r deploy/RCM/rcm/client/requirements.txt && python -c \"exec(\\\"try: import paramiko\\\nexcept:\\\\n print( 'missing paramiko')\\\")\""
 
 echo "copy external bundle"
-scp -r ${BUILD_HOST_PORT} $BUILD_RCM_EXTERNAL_PATH/$BUILD_EXT_PATH $BUILD_USER@${BUILD_HOST}:deploy/RCM/rcm/client/external/turbovnc 
+if [ "x${BUILD_EXT_PATH}" != "x" ]
+then
+    scp -r ${BUILD_HOST_PORT} $BUILD_RCM_EXTERNAL_PATH/$BUILD_EXT_PATH $BUILD_USER@${BUILD_HOST}:deploy/RCM/rcm/client/external/turbovnc 
+fi
 
 ################## build release with pyinstaller #######
 echo "building  both onedir nd onefile at same time"
