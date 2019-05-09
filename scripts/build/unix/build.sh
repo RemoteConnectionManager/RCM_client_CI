@@ -66,6 +66,7 @@ echo "############ unconditionally clean sandbox folder from VM"
 ${BUILD_SSH_COMMAND} "if [ ! -f deploy ]; then rm -fr deploy; mkdir deploy; fi"
 
 echo "############ unconditionally copy RCM folder to VM"
+echo "executing:::>scp -r ${BUILD_HOST_PORT} $BUILD_RCM_SOURCE_PATH $BUILD_USER@${BUILD_HOST}:deploy <:::"
 scp -r ${BUILD_HOST_PORT} $BUILD_RCM_SOURCE_PATH $BUILD_USER@${BUILD_HOST}:deploy 
 
 echo "install RCM requirements"
