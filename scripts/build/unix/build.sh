@@ -53,9 +53,6 @@ echo "system python version $version"
 #uncomment#echo "unconditionally install virualenv"
 #uncomment#ssh $BUILD_USER@${BUILD_HOST} "pip3 install virtualenv"
 
-version=$(${BUILD_SSH_COMMAND} "${BUILD_VIRTUALENV_COMMAND} --version")
-echo "virtualenv version $version"
-
 ${BUILD_SSH_COMMAND} "if [ ! -f py3env/bin/activate ]; then ${BUILD_VIRTUALENV_COMMAND} py3env; fi"
 
 ##############   inspect virtualenv environment ##############
