@@ -9,4 +9,4 @@ export BUILD_HOST_PORT="-p 22000"
 export BUILD_PLATFORM=darwin/64bit
 export BUILD_EXT_PATH=""
 export BUILD_SUDO_SETUP="echo NO_MACOS_INSTALL"
-export BUILD_VIRTUALENV_COMMAND="virtualenv -p python3.6"
+export BUILD_VIRTUALENV_COMMAND="python3.6 -m venv"
