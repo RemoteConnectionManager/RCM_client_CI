@@ -73,8 +73,8 @@ echo "############ unconditionally clean sandbox folder from VM"
 ${BUILD_SSH_COMMAND} "if [ ! -f deploy ]; then rm -fr deploy; mkdir deploy; fi"
 
 echo "############ unconditionally copy RCM folder to VM"
-echo "executing:::>${BUILD_SCP_COMMAND} -r ${BUILD_HOST_PORT} $BUILD_RCM_SOURCE_PATH $BUILD_USER@${BUILD_HOST}:deploy <:::"
-${BUILD_SCP_COMMAND} -r ${BUILD_HOST_PORT} $BUILD_RCM_SOURCE_PATH $BUILD_USER@${BUILD_HOST}:deploy 
+echo "executing:::>${BUILD_SCP_COMMAND} -r $BUILD_RCM_SOURCE_PATH $BUILD_USER@${BUILD_HOST}:deploy <:::"
+${BUILD_SCP_COMMAND} -r $BUILD_RCM_SOURCE_PATH $BUILD_USER@${BUILD_HOST}:deploy 
 
 echo "install RCM requirements"
 ${BUILD_SSH_COMMAND} "source py3env/bin/activate && which pip3 && pip3 install -r deploy/RCM/rcm/client/requirements.txt && python -c \"exec(\\\"try: import paramiko\\\nexcept:\\\\n print( 'missing paramiko')\\\")\""
@@ -82,7 +82,7 @@ ${BUILD_SSH_COMMAND} "source py3env/bin/activate && which pip3 && pip3 install -
 echo "copy external bundle"
 if [ "x${BUILD_EXT_PATH}" != "x" ]
 then
-    ${BUILD_SCP_COMMAND} -r ${BUILD_HOST_PORT} $BUILD_RCM_EXTERNAL_PATH/$BUILD_EXT_PATH $BUILD_USER@${BUILD_HOST}:deploy/RCM/rcm/client/external/turbovnc 
+    ${BUILD_SCP_COMMAND} -r $BUILD_RCM_EXTERNAL_PATH/$BUILD_EXT_PATH $BUILD_USER@${BUILD_HOST}:deploy/RCM/rcm/client/external/turbovnc 
 fi
 
 ################## build release with pyinstaller #######
@@ -92,5 +92,5 @@ echo "build result -->$build<--"
 
 ################## copy artifacts from vm #######
 mkdir -p $BUILD_RCM_ARTIFACTS_PATH/$BUILD_PLATFORM
-${BUILD_SCP_COMMAND} -r ${BUILD_HOST_PORT} $BUILD_USER@${BUILD_HOST}:deploy/dist/* $BUILD_RCM_ARTIFACTS_PATH
+${BUILD_SCP_COMMAND} -r $BUILD_USER@${BUILD_HOST}:deploy/dist/* $BUILD_RCM_ARTIFACTS_PATH
 
