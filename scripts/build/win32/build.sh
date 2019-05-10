@@ -73,6 +73,5 @@ build=$(ssh $BUILD_USER@${BUILD_HOST} "cmd /C py3env\\\\Scripts\\\\activate \& c
 echo "build result -->$build<--"
 
 ################## copy artifacts from vm #######
-mkdir -p $BUILD_RCM_ARTIFACTS_PATH/$BUILD_PLATFORM
 scp -r $BUILD_USER@${BUILD_HOST}:deploy/dist/* $BUILD_RCM_ARTIFACTS_PATH
 

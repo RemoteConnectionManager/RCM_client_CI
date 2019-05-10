@@ -91,6 +91,5 @@ build=$(${BUILD_SSH_COMMAND} "source py3env/bin/activate && cd deploy && pyinsta
 echo "build result -->$build<--"
 
 ################## copy artifacts from vm #######
-mkdir -p $BUILD_RCM_ARTIFACTS_PATH/$BUILD_PLATFORM
 ${BUILD_SCP_COMMAND} -r $BUILD_USER@${BUILD_HOST}:deploy/dist/* $BUILD_RCM_ARTIFACTS_PATH
 
