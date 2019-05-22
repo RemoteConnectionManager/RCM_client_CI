@@ -22,6 +22,7 @@ export BUILD_RCM_ARTIFACTS_PATH="$BUILD_ROOT_PATH/artifacts"
 
 ###############   source specific VM setup ###########
 export BUILD_HOST_PORT=""
+export BUILD_VIRTUALENV_REQUIREMENTS="pip3 install -r deploy/RCM/rcm/client/requirements.txt && python"
 source $CURR_PATH/$1/setup.sh
 if [ "x${BUILD_HOST_PORT}" != "x" ]
 then
@@ -77,7 +78,7 @@ echo "executing:::>${BUILD_SCP_COMMAND} -r $BUILD_RCM_SOURCE_PATH $BUILD_USER@${
 ${BUILD_SCP_COMMAND} -r $BUILD_RCM_SOURCE_PATH $BUILD_USER@${BUILD_HOST}:deploy 
 
 echo "install RCM requirements"
-${BUILD_SSH_COMMAND} "source py3env/bin/activate && which pip3 && pip3 install -r deploy/RCM/rcm/client/requirements.txt && python -c \"exec(\\\"try: import paramiko\\\nexcept:\\\\n print( 'missing paramiko')\\\")\""
+${BUILD_SSH_COMMAND} "source py3env/bin/activate && which pip3 && ${BUILD_VIRTUALENV_REQUIREMENTS} && python -c \"exec(\\\"try: import paramiko\\\nexcept:\\\\n print( 'missing paramiko')\\\")\""
 
 echo "copy external bundle"
 if [ "x${BUILD_EXT_PATH}" != "x" ]
