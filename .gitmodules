@@ -1,4 +1,4 @@
 [submodule "RCM"]
 	path = RCM
 	url = https://github.com/RemoteConnectionManager/RCM
-	branch = feature/yaml_config
+	branch = dev
