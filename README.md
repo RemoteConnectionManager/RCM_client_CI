@@ -4,11 +4,20 @@
 
 This repo is using both git submodule as well as git lfs ( large file support )
 
-chech your git version is recent ( > 2.13 )
+For git lfs, git version should be >= 1.8.2
+
+On ubuntu, for example:
+
 
 
 ```sh
 git --version
+# to install git-lfs
+curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
+sudo apt-get install git-lfs
+# register git-lfs plugin into git
+git lfs install
+
 ```
 
 ```sh

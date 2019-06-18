@@ -16,7 +16,7 @@ done
 CURR_PATH="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 export BUILD_ROOT_PATH="$( dirname $( dirname $( dirname "$CURR_PATH" ) ) )" 
 export BUILD_RCM_SOURCE_PATH="$BUILD_ROOT_PATH/RCM" 
-export BUILD_RCM_RELEASE=$(cd $BUILD_RCM_SOURCE_PATH; git describe)
+export BUILD_RCM_RELEASE=$(cd $BUILD_RCM_SOURCE_PATH; git describe --tags --long | python -c 'import sys; print(sys.stdin.readline().strip().split("/")[-1:][0])')
 export BUILD_RCM_EXTERNAL_PATH="$BUILD_ROOT_PATH/external" 
 export BUILD_RCM_ARTIFACTS_PATH="$BUILD_ROOT_PATH/artifacts" 
 
@@ -73,6 +73,5 @@ build=$(ssh $BUILD_USER@${BUILD_HOST} "cmd /C py3env\\\\Scripts\\\\activate \& c
 echo "build result -->$build<--"
 
 ################## copy artifacts from vm #######
-mkdir -p $BUILD_RCM_ARTIFACTS_PATH/$BUILD_PLATFORM
-scp -r $BUILD_USER@${BUILD_HOST}:deploy/dist $BUILD_RCM_ARTIFACTS_PATH/$BUILD_PLATFORM/$BUILD_RCM_RELEASE
+scp -r $BUILD_USER@${BUILD_HOST}:deploy/dist/* $BUILD_RCM_ARTIFACTS_PATH
 
