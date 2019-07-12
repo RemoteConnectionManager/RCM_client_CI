@@ -73,9 +73,11 @@ build=$(ssh $BUILD_USER@${BUILD_HOST} "cmd /C py3env\\\\Scripts\\\\activate \& c
 echo "build result -->$build<--"
 
 ################## copy artifacts from vm #######
-artifact_platform_folder=$(ssh $BUILD_USER@${BUILD_HOST} "cmd /C dir deploy\\\\dist \& dir")
+artifact_platform_folder=$(ssh $BUILD_USER@${BUILD_HOST} "cmd /C python -c \"import os; print(os.listdir(os.path.join(os.curdir, 'deploy', 'dist'))[0])\"")
 echo "artifact_platform_folder -->$artifact_platform_folder<--"
-artifact_folder=$(ssh $BUILD_USER@${BUILD_HOST} "cmd /C dir deploy\\\\dist\\\\${artifact_platform_folder} \& dir")
+
+echo "artifact_platform_folder -->$artifact_platform_folder<--"
+artifact_folder=$(ssh $BUILD_USER@${BUILD_HOST} "cmd /C python -c \"import os; print(os.listdir(os.path.join(os.curdir, 'deploy', 'dist' '${artifact_platform_folder}'))[0])\"")
 echo "artifact_folder -->$artifact_folder<--"
 
 scp -r $BUILD_USER@${BUILD_HOST}:deploy/dist/* $BUILD_RCM_ARTIFACTS_PATH
