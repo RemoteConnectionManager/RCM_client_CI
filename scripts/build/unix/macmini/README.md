@@ -7,7 +7,7 @@ we have relied on a reverse ssh tunnel on port 22000 from macmini to jenkins nod
 macmini user
 
 this is done by the command:
-ssh -N -R 22000:localhost:22 ubuntu@130.186.13.241
+ssh -N -R 22000:localhost:22 ubuntu@jenkins-ci.rcm.cineca.it
 
 In order to make it persistent across reboot, the file:
 com.launchd.jenkinsreversetunnel.plist
@@ -17,6 +17,6 @@ has to be copied into
 
 To create plist....
 
-sudo /usr/libexec/PlistBuddy /Library/LaunchAgents/com.launchd.jenkinsreversetunnel.plist -c "add Label string com.launchd.jenkinsreversetunnel" -c "add ProgramArguments array" -c "add ProgramArguments: string ssh" -c "add ProgramArguments: string -N" -c "add ProgramArguments: string -R" -c "add ProgramArguments: string 22000:localhost:22" -c "add ProgramArguments: string ubuntu@130.186.13.241" -c "add RunAtLoad bool true" -c "add UserName string rcm"
+sudo /usr/libexec/PlistBuddy /Library/LaunchAgents/com.launchd.jenkinsreversetunnel.plist -c "add Label string com.launchd.jenkinsreversetunnel" -c "add ProgramArguments array" -c "add ProgramArguments: string ssh" -c "add ProgramArguments: string -N" -c "add ProgramArguments: string -R" -c "add ProgramArguments: string 22000:localhost:22" -c "add ProgramArguments: string ubuntu@jenkins-ci.rcm.cineca.it" -c "add RunAtLoad bool true" -c "add UserName string rcm"
 
 
