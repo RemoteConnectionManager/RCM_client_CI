@@ -1,4 +1,5 @@
 [submodule "RCM"]
 	path = RCM
 	url = https://github.com/RemoteConnectionManager/RCM
-	branch = build_archlinux
+	branch = dev_new
+
