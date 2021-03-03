@@ -28,9 +28,8 @@ if lfs plugin is not present, instruction in
 * [Wiki git lfs hints](https://github.com/RemoteConnectionManager/RCM_client_CI/wiki/git-lfs)
 
 ```sh
-mkdir <new_folder>
-cd <new_folder>
-git clone https://github.com/RemoteConnectionManager/RCM_client_CI.git
+git clone -b dev_new --recursive https://github.com/RemoteConnectionManager/RCM_client_CI.git 
+cd RCM_client_CI
 ```
 
 If you want to update to the latests commit also the submodule, do
@@ -45,8 +44,11 @@ look at client instructions:
 * [RCM client README](https://github.com/RemoteConnectionManager/RCM/tree/refactoring/rcm/client)
 
 or you can use a setup script that is setting up needed environment and alias
+try to find the best matching scripts for your current client architecture, like
+
 ```sh
 source scripts/dev_setup.sh
 RCM
 ```
-
+The first time, the script should create a virtual environment, install RCM requirments and activate the environment, then yu shgould be able to execute the script that start the GUI interface.
+In case of error during requirements install, try to fix the script, remo the produced virtual env and try again
